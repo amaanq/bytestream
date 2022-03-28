@@ -494,6 +494,10 @@ func (r *Reader) ReadLogicLong(endianness Endianness) ([]string, error) {
 }
 
 // TODO allow reading any int with size from int8 to int64 (mostly allow 40/48/56...)
-func (r *Reader) ReadUIntSize(size uint8, endianness Endianness) (int64, error)
+func (r *Reader) ReadUIntSize(size uint8, endianness Endianness) (int64, error) {
+	return 0, nil
+}
 
-func (r *Reader) ReadIntSize(size uint8, endianness Endianness) (int64, error)
+func (r *Reader) ReadIntSize(size uint8, endianness Endianness) (int64, error) {
+	return 0, nil
+}

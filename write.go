@@ -284,8 +284,8 @@ func (w *Writer) WriteCompressedString(data string) error {
 		return err
 	}
 	w.Buffer.Write(compressedBytes) // write compressed data
-	if n != compressedLength {
-		return fmt.Errorf("invalid number of bytes written! Wrote: " + fmt.Sprint(n) + " Expected: " + fmt.Sprint(compressedLength))
+	if n != decompressedLength {
+		return fmt.Errorf("invalid number of bytes written! Wrote: " + fmt.Sprint(n) + " Expected: " + fmt.Sprint(decompressedLength))
 	}
 	return nil
 }
@@ -300,6 +300,10 @@ func (w *Writer) WriteLogicLong(tag string) error {
 }
 
 // TODO allow writing any int with size from int8 to int64 (mostly allow 40/48/56...)
-func (w *Writer) WriteUIntSize(data int64, size uint8, endianness Endianness) error
+func (w *Writer) WriteUIntSize(data int64, size uint8, endianness Endianness) error {
+	return nil
+}
 
-func (w *Writer) WriteIntSize(data int64, size uint8, endianness Endianness) error
+func (w *Writer) WriteIntSize(data int64, size uint8, endianness Endianness) error {
+	return nil
+}

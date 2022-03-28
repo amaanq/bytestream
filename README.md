@@ -10,17 +10,16 @@ go get -u github.com/amaanq/bytestream
 #### **Usage**
 ```go
 import (
-    "fmt"
     "github.com/amaanq/bytestream"
 )
 
 func main() {
     Writer := &bytestream.Writer{
-		buffer: bytes.NewBuffer([]byte{}),
+	    buffer: bytes.NewBuffer([]byte{}),
 	}
     Writer.WriteCompressedString("hello there!")
-    Writer.WriteInt32(40, bytestream.BigEndian)
-    // You've now packed hello there! and 40 into a very small byte array to do with what you please..
+	Writer.WriteInt32(40, bytestream.BigEndian)
+	// You've now packed hello there! and 40 into a very small byte array to do with what you please..
 }
 ```
 

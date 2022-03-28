@@ -2,6 +2,8 @@ package bytestream
 
 const Is64Bit = uint64(^uintptr(0)) == ^uint64(0)
 
+const i = ^uint64(0)
+
 type Sign bool
 
 const (
@@ -24,7 +26,7 @@ const (
 	Int24Size     = Int16Size + Int8Size
 	Int32Size     = Int16Size * 2
 	Int64Size     = Int32Size * 2
-	LongSize      = Int64Size
+	LongSize      = 8 // Not tested if this works on 32-bit machines...
 	LogicLongSize = LongSize
-	LongLongSize  = LongSize * 2
+	LongLongSize  = LongSize
 )
