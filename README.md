@@ -15,12 +15,12 @@ import (
 )
 
 func main() {
-    Writer := &bytestream.Writer{
+	Writer := &bytestream.Writer{
 		buffer: bytes.NewBuffer([]byte{}),
 	}
 	Writer.WriteCompressedString("hello there!")
-    Writer.WriteInt32(40, bytestream.BigEndian)
-    // You've now packed hello there! and 40 into a very small byte array to do with what you please..
+	Writer.WriteInt32(40, bytestream.BigEndian)
+	// You've now packed hello there! and 40 into a very small byte array to do with what you please..
 }
 ```
 
