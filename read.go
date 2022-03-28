@@ -8,12 +8,12 @@ import (
 )
 
 type Reader struct {
-	reader *bytes.Reader
+	Reader *bytes.Reader
 }
 
 func (r *Reader) ReadBytes(length int) ([]byte, error) {
 	_bytes := make([]byte, length)
-	n, err := r.reader.Read(_bytes)
+	n, err := r.Reader.Read(_bytes)
 	if err != nil {
 		return nil, err
 	}
@@ -25,7 +25,7 @@ func (r *Reader) ReadBytes(length int) ([]byte, error) {
 
 func (r *Reader) ReadBool() (bool, int8, error) {
 	// A bool can be packed into a byte
-	_byte, err := r.reader.ReadByte()
+	_byte, err := r.Reader.ReadByte()
 	if err != nil {
 		return false, 0, err
 	}
@@ -37,7 +37,7 @@ func (r *Reader) ReadBool() (bool, int8, error) {
 
 func (r *Reader) ReadInt8() (int8, error) {
 	// An int8 is effectively a byte
-	_byte, err := r.reader.ReadByte()
+	_byte, err := r.Reader.ReadByte()
 	if err != nil {
 		return 0, err
 	}
@@ -46,7 +46,7 @@ func (r *Reader) ReadInt8() (int8, error) {
 
 func (r *Reader) ReadUInt8() (uint8, error) {
 	// A uint8 is also effectively a byte
-	_byte, err := r.reader.ReadByte()
+	_byte, err := r.Reader.ReadByte()
 	if err != nil {
 		return 0, err
 	}
@@ -56,7 +56,7 @@ func (r *Reader) ReadUInt8() (uint8, error) {
 func (r *Reader) ReadInt16(endianness Endianness) (int16, error) {
 	// An int16 is 2 bytes
 	_bytes := make([]byte, 2)
-	n, err := r.reader.Read(_bytes)
+	n, err := r.Reader.Read(_bytes)
 	if err != nil {
 		return 0, err
 	}
@@ -77,7 +77,7 @@ func (r *Reader) ReadInt16(endianness Endianness) (int16, error) {
 func (r *Reader) ReadUInt16(endianness Endianness) (uint16, error) {
 	// A uint16 is also 2 bytes
 	_bytes := make([]byte, 2)
-	n, err := r.reader.Read(_bytes)
+	n, err := r.Reader.Read(_bytes)
 	if err != nil {
 		return 0, err
 	}
@@ -99,7 +99,7 @@ func (r *Reader) ReadUInt16(endianness Endianness) (uint16, error) {
 func (r *Reader) ReadInt24(endianness Endianness) (int32, error) {
 	// An int24 is 3 bytes
 	_bytes := make([]byte, 3)
-	n, err := r.reader.Read(_bytes)
+	n, err := r.Reader.Read(_bytes)
 	if err != nil {
 		return 0, err
 	}
@@ -121,7 +121,7 @@ func (r *Reader) ReadInt24(endianness Endianness) (int32, error) {
 func (r *Reader) ReadUInt24(endianness Endianness) (uint32, error) {
 	// A uint24 is 3 bytes
 	_bytes := make([]byte, 3)
-	n, err := r.reader.Read(_bytes)
+	n, err := r.Reader.Read(_bytes)
 	if err != nil {
 		return 0, err
 	}
@@ -142,7 +142,7 @@ func (r *Reader) ReadUInt24(endianness Endianness) (uint32, error) {
 func (r *Reader) ReadInt32(endianness Endianness) (int32, error) {
 	// An int32 is 4 bytes
 	_bytes := make([]byte, 4)
-	n, err := r.reader.Read(_bytes)
+	n, err := r.Reader.Read(_bytes)
 	if err != nil {
 		return 0, err
 	}
@@ -163,7 +163,7 @@ func (r *Reader) ReadInt32(endianness Endianness) (int32, error) {
 func (r *Reader) ReadUInt32(endianness Endianness) (uint32, error) {
 	// A uint32 is 4 bytes
 	_bytes := make([]byte, 4)
-	n, err := r.reader.Read(_bytes)
+	n, err := r.Reader.Read(_bytes)
 	if err != nil {
 		return 0, err
 	}
@@ -184,7 +184,7 @@ func (r *Reader) ReadUInt32(endianness Endianness) (uint32, error) {
 func (r *Reader) ReadInt64(endianness Endianness) (int64, error) {
 	// An int64 is 8 bytes
 	_bytes := make([]byte, 8)
-	n, err := r.reader.Read(_bytes)
+	n, err := r.Reader.Read(_bytes)
 	if err != nil {
 		return 0, err
 	}
@@ -205,7 +205,7 @@ func (r *Reader) ReadInt64(endianness Endianness) (int64, error) {
 func (r *Reader) ReadUInt64(endianness Endianness) (uint64, error) {
 	// A uint64 is 8 bytes
 	_bytes := make([]byte, 8)
-	n, err := r.reader.Read(_bytes)
+	n, err := r.Reader.Read(_bytes)
 	if err != nil {
 		return 0, err
 	}
@@ -225,7 +225,7 @@ func (r *Reader) ReadUInt64(endianness Endianness) (uint64, error) {
 
 func (r *Reader) ReadVarInt() (int64, error) {
 	// A varint is a variable length integer.
-	n, err := binary.ReadVarint(r.reader)
+	n, err := binary.ReadVarint(r.Reader)
 	if err != nil {
 		return 0, err
 	}
@@ -234,7 +234,7 @@ func (r *Reader) ReadVarInt() (int64, error) {
 
 func (r *Reader) ReadUVarInt() (uint64, error) {
 	// An unsigned varint is a variable length integer.
-	n, err := binary.ReadUvarint(r.reader)
+	n, err := binary.ReadUvarint(r.Reader)
 	if err != nil {
 		return 0, err
 	}
@@ -245,7 +245,7 @@ func (r *Reader) ReadLong(endianness Endianness) (int, error) {
 	// A long is 4 bytes on a 32-bit machine and 8 bytes on a 64-bit machine.
 	if Is64Bit {
 		_bytes := make([]byte, 8)
-		n, err := r.reader.Read(_bytes)
+		n, err := r.Reader.Read(_bytes)
 		if err != nil {
 			return 0, err
 		}
@@ -263,7 +263,7 @@ func (r *Reader) ReadLong(endianness Endianness) (int, error) {
 		}
 	} else {
 		_bytes := make([]byte, 4)
-		n, err := r.reader.Read(_bytes)
+		n, err := r.Reader.Read(_bytes)
 		if err != nil {
 			return 0, err
 		}
@@ -286,7 +286,7 @@ func (r *Reader) ReadUnsignedLong(endianness Endianness) (uint, error) {
 	// An unsigned long is 4 bytes on a 32-bit machine and 8 bytes on a 64-bit machine.
 	if Is64Bit {
 		_bytes := make([]byte, 8)
-		n, err := r.reader.Read(_bytes)
+		n, err := r.Reader.Read(_bytes)
 		if err != nil {
 			return 0, err
 		}
@@ -304,7 +304,7 @@ func (r *Reader) ReadUnsignedLong(endianness Endianness) (uint, error) {
 		}
 	} else {
 		_bytes := make([]byte, 4)
-		n, err := r.reader.Read(_bytes)
+		n, err := r.Reader.Read(_bytes)
 		if err != nil {
 			return 0, err
 		}
@@ -326,7 +326,7 @@ func (r *Reader) ReadUnsignedLong(endianness Endianness) (uint, error) {
 func (r *Reader) ReadLongLong(endianness Endianness) (int64, error) {
 	// A long long is guaranteed to be 8 bytes
 	_bytes := make([]byte, 8)
-	n, err := r.reader.Read(_bytes)
+	n, err := r.Reader.Read(_bytes)
 	if err != nil {
 		return 0, err
 	}
@@ -347,7 +347,7 @@ func (r *Reader) ReadLongLong(endianness Endianness) (int64, error) {
 func (r *Reader) ReadUnsignedLongLong(endianness Endianness) (uint64, error) {
 	// An unsigned long long is guaranteed to be 8 bytes
 	_bytes := make([]byte, 8)
-	n, err := r.reader.Read(_bytes)
+	n, err := r.Reader.Read(_bytes)
 	if err != nil {
 		return 0, err
 	}
@@ -378,7 +378,7 @@ func (r *Reader) ReadString() (string, error) {
 	}
 
 	_bytes := make([]byte, ssize_t)
-	n, err := r.reader.Read(_bytes)
+	n, err := r.Reader.Read(_bytes)
 	if err != nil {
 		return "", err
 	}
@@ -397,7 +397,7 @@ func (r *Reader) ReadStringSize(ssize_t int) (string, error) {
 	}
 
 	_bytes := make([]byte, ssize_t)
-	n, err := r.reader.Read(_bytes)
+	n, err := r.Reader.Read(_bytes)
 	if err != nil {
 		return "", err
 	}
@@ -428,7 +428,7 @@ func (r *Reader) ReadCompressedString() (string, error) {
 	}
 
 	compressedBytes := make([]byte, compressedLen)
-	n, err := r.reader.Read(compressedBytes)
+	n, err := r.Reader.Read(compressedBytes)
 	if err != nil {
 		return "", err
 	}
@@ -458,14 +458,14 @@ func (r *Reader) ReadLogicLong(endianness Endianness) ([]string, error) {
 	// A logic long is 8 bytes
 	low_bytes := make([]byte, 4)
 	high_bytes := make([]byte, 4)
-	n, err := r.reader.Read(low_bytes)
+	n, err := r.Reader.Read(low_bytes)
 	if err != nil {
 		return nil, err
 	}
 	if n != Int32Size {
 		return nil, fmt.Errorf("invalid number of bytes read! Read: " + fmt.Sprint(n) + " Expected: 4")
 	}
-	n, err = r.reader.Read(high_bytes)
+	n, err = r.Reader.Read(high_bytes)
 	if err != nil {
 		return nil, err
 	}

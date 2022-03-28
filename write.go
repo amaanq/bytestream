@@ -8,11 +8,19 @@ import (
 )
 
 type Writer struct {
-	buffer *bytes.Buffer
+	Buffer *bytes.Buffer
+}
+
+func New() {
+	Writer := &Writer{
+		Buffer: bytes.NewBuffer([]byte{}),
+	}
+	Writer.WriteCompressedString("hello there!")
+	Writer.Buffer.Bytes()
 }
 
 func (w *Writer) WriteBytes(bytes []byte) error {
-	n, err := w.buffer.Write(bytes)
+	n, err := w.Buffer.Write(bytes)
 	if err != nil {
 		return err
 	}
@@ -24,26 +32,26 @@ func (w *Writer) WriteBytes(bytes []byte) error {
 
 func (w *Writer) WriteBool(data bool, count int8) error {
 	if !data {
-		return w.buffer.WriteByte(0x00)
+		return w.Buffer.WriteByte(0x00)
 	}
-	return w.buffer.WriteByte(byte(count))
+	return w.Buffer.WriteByte(byte(count))
 }
 
 func (w *Writer) WriteInt8(data int8) error {
 	// An int8 is effectively a byte
-	return w.buffer.WriteByte(byte(data))
+	return w.Buffer.WriteByte(byte(data))
 }
 
 func (w *Writer) WriteUInt8(data uint8) error {
-	return w.buffer.WriteByte(byte(data))
+	return w.Buffer.WriteByte(byte(data))
 }
 
 func (w *Writer) WriteInt16(data int16, endianness Endianness) error {
 	switch endianness {
 	case BigEndian:
-		return binary.Write(w.buffer, binary.BigEndian, data)
+		return binary.Write(w.Buffer, binary.BigEndian, data)
 	case LittleEndian:
-		return binary.Write(w.buffer, binary.LittleEndian, data)
+		return binary.Write(w.Buffer, binary.LittleEndian, data)
 	default:
 		return fmt.Errorf("invalid endianness")
 	}
@@ -52,9 +60,9 @@ func (w *Writer) WriteInt16(data int16, endianness Endianness) error {
 func (w *Writer) WriteUInt16(data uint16, endianness Endianness) error {
 	switch endianness {
 	case BigEndian:
-		return binary.Write(w.buffer, binary.BigEndian, data)
+		return binary.Write(w.Buffer, binary.BigEndian, data)
 	case LittleEndian:
-		return binary.Write(w.buffer, binary.LittleEndian, data)
+		return binary.Write(w.Buffer, binary.LittleEndian, data)
 	default:
 		return fmt.Errorf("invalid endianness")
 	}
@@ -67,13 +75,13 @@ func (w *Writer) WriteInt24(data int32, endianness Endianness) error {
 
 	switch endianness {
 	case BigEndian:
-		w.buffer.WriteByte(byte(data >> 16))
-		w.buffer.WriteByte(byte(data >> 8))
-		w.buffer.WriteByte(byte(data))
+		w.Buffer.WriteByte(byte(data >> 16))
+		w.Buffer.WriteByte(byte(data >> 8))
+		w.Buffer.WriteByte(byte(data))
 	case LittleEndian:
-		w.buffer.WriteByte(byte(data))
-		w.buffer.WriteByte(byte(data >> 8))
-		w.buffer.WriteByte(byte(data >> 16))
+		w.Buffer.WriteByte(byte(data))
+		w.Buffer.WriteByte(byte(data >> 8))
+		w.Buffer.WriteByte(byte(data >> 16))
 	default:
 		return fmt.Errorf("invalid endianness")
 	}
@@ -87,13 +95,13 @@ func (w *Writer) WriteUInt24(data uint32, endianness Endianness) error {
 
 	switch endianness {
 	case BigEndian:
-		w.buffer.WriteByte(byte(data >> 16))
-		w.buffer.WriteByte(byte(data >> 8))
-		w.buffer.WriteByte(byte(data))
+		w.Buffer.WriteByte(byte(data >> 16))
+		w.Buffer.WriteByte(byte(data >> 8))
+		w.Buffer.WriteByte(byte(data))
 	case LittleEndian:
-		w.buffer.WriteByte(byte(data))
-		w.buffer.WriteByte(byte(data >> 8))
-		w.buffer.WriteByte(byte(data >> 16))
+		w.Buffer.WriteByte(byte(data))
+		w.Buffer.WriteByte(byte(data >> 8))
+		w.Buffer.WriteByte(byte(data >> 16))
 	default:
 		return fmt.Errorf("invalid endianness")
 	}
@@ -103,9 +111,9 @@ func (w *Writer) WriteUInt24(data uint32, endianness Endianness) error {
 func (w *Writer) WriteInt32(data int32, endianness Endianness) error {
 	switch endianness {
 	case BigEndian:
-		return binary.Write(w.buffer, binary.BigEndian, data)
+		return binary.Write(w.Buffer, binary.BigEndian, data)
 	case LittleEndian:
-		return binary.Write(w.buffer, binary.LittleEndian, data)
+		return binary.Write(w.Buffer, binary.LittleEndian, data)
 	default:
 		return fmt.Errorf("invalid endianness")
 	}
@@ -114,9 +122,9 @@ func (w *Writer) WriteInt32(data int32, endianness Endianness) error {
 func (w *Writer) WriteUInt32(data uint32, endianness Endianness) error {
 	switch endianness {
 	case BigEndian:
-		return binary.Write(w.buffer, binary.BigEndian, data)
+		return binary.Write(w.Buffer, binary.BigEndian, data)
 	case LittleEndian:
-		return binary.Write(w.buffer, binary.LittleEndian, data)
+		return binary.Write(w.Buffer, binary.LittleEndian, data)
 	default:
 		return fmt.Errorf("invalid endianness")
 	}
@@ -125,9 +133,9 @@ func (w *Writer) WriteUInt32(data uint32, endianness Endianness) error {
 func (w *Writer) WriteInt64(data int64, endianness Endianness) error {
 	switch endianness {
 	case BigEndian:
-		return binary.Write(w.buffer, binary.BigEndian, data)
+		return binary.Write(w.Buffer, binary.BigEndian, data)
 	case LittleEndian:
-		return binary.Write(w.buffer, binary.LittleEndian, data)
+		return binary.Write(w.Buffer, binary.LittleEndian, data)
 	default:
 		return fmt.Errorf("invalid endianness")
 	}
@@ -136,9 +144,9 @@ func (w *Writer) WriteInt64(data int64, endianness Endianness) error {
 func (w *Writer) WriteUInt64(data uint64, endianness Endianness) error {
 	switch endianness {
 	case BigEndian:
-		return binary.Write(w.buffer, binary.BigEndian, data)
+		return binary.Write(w.Buffer, binary.BigEndian, data)
 	case LittleEndian:
-		return binary.Write(w.buffer, binary.LittleEndian, data)
+		return binary.Write(w.Buffer, binary.LittleEndian, data)
 	default:
 		return fmt.Errorf("invalid endianness")
 	}
@@ -154,10 +162,10 @@ func (w *Writer) WriteVarInt(data int64) error {
 
 func (w *Writer) WriteUVarInt(data uint64) error {
 	for data >= 0x80 {
-		w.buffer.WriteByte(byte(data) | 0x80)
+		w.Buffer.WriteByte(byte(data) | 0x80)
 		data >>= 7
 	}
-	return w.buffer.WriteByte(byte(data))
+	return w.Buffer.WriteByte(byte(data))
 }
 
 func (w *Writer) WriteLong(data int64, endianness Endianness) error {
@@ -194,7 +202,7 @@ func (w *Writer) WriteString(data string) error {
 	if err != nil {
 		return err
 	}
-	n, err := w.buffer.WriteString(data)
+	n, err := w.Buffer.WriteString(data)
 	if err != nil {
 		return err
 	}
@@ -251,7 +259,7 @@ func (w *Writer) WriteStringSize(data string, bytesize int8) error {
 	default:
 		return fmt.Errorf("invalid string size")
 	}
-	n, err := w.buffer.WriteString(data)
+	n, err := w.Buffer.WriteString(data)
 	if err != nil {
 		return err
 	}
@@ -283,7 +291,7 @@ func (w *Writer) WriteCompressedString(data string) error {
 	if err != nil {
 		return err
 	}
-	w.buffer.Write(compressedBytes) // write compressed data
+	w.Buffer.Write(compressedBytes) // write compressed data
 	if n != compressedLength {
 		return fmt.Errorf("invalid number of bytes written! Wrote: " + fmt.Sprint(n) + " Expected: " + fmt.Sprint(compressedLength))
 	}
