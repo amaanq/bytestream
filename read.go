@@ -9,11 +9,11 @@ import (
 )
 
 type Reader struct {
-	Reader *bytes.Reader
+	Reader *bytes.Buffer
 }
 
 func NewReader(data []byte) *Reader {
-	return &Reader{bytes.NewReader(data)}
+	return &Reader{bytes.NewBuffer(data)}
 }
 
 func (r *Reader) ReadBytes(length int) ([]byte, error) {
