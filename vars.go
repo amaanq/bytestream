@@ -2,8 +2,6 @@ package bytestream
 
 const Is64Bit = uint64(^uintptr(0)) == ^uint64(0)
 
-const i = ^uint64(0)
-
 type Sign bool
 
 const (

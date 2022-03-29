@@ -12,6 +12,10 @@ type Reader struct {
 	Reader *bytes.Reader
 }
 
+func NewReader(data []byte) *Reader {
+	return &Reader{bytes.NewReader(data)}
+}
+
 func (r *Reader) ReadBytes(length int) ([]byte, error) {
 	_bytes := make([]byte, length)
 	n, err := r.Reader.Read(_bytes)

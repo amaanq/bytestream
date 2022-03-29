@@ -11,6 +11,10 @@ type Writer struct {
 	Buffer *bytes.Buffer
 }
 
+func NewWriter() *Writer {
+	return &Writer{Buffer: bytes.NewBuffer([]byte{})}
+}
+
 func (w *Writer) WriteBytes(bytes []byte) error {
 	n, err := w.Buffer.Write(bytes)
 	if err != nil {
