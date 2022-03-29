@@ -111,7 +111,6 @@ func TestWriter_WriteUInt8(t *testing.T) {
 		args    args
 		wantErr bool
 	}{
-		// TODO: Add test cases.
 		{name: "zero", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 0}, wantErr: false},
 		{name: "one", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 1}, wantErr: false},
 		{name: "two", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 2}, wantErr: false},
@@ -143,7 +142,17 @@ func TestWriter_WriteInt16(t *testing.T) {
 		args    args
 		wantErr bool
 	}{
-		// TODO: Add test cases.
+		{name: "zero", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 0, endianness: BigEndian}, wantErr: false},
+		{name: "one", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 1, endianness: BigEndian}, wantErr: false},
+		{name: "two", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 2, endianness: BigEndian}, wantErr: false},
+		{name: "minus one", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: -1, endianness: BigEndian}, wantErr: false},
+		{name: "max", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 32767, endianness: BigEndian}, wantErr: false},
+
+		{name: "zero", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 0, endianness: LittleEndian}, wantErr: false},
+		{name: "one", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 1, endianness: LittleEndian}, wantErr: false},
+		{name: "two", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 2, endianness: LittleEndian}, wantErr: false},
+		{name: "minus one", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: -1, endianness: LittleEndian}, wantErr: false},
+		{name: "max", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 32767, endianness: LittleEndian}, wantErr: false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -171,7 +180,15 @@ func TestWriter_WriteUInt16(t *testing.T) {
 		args    args
 		wantErr bool
 	}{
-		// TODO: Add test cases.
+		{name: "zero", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 0, endianness: BigEndian}, wantErr: false},
+		{name: "one", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 1, endianness: BigEndian}, wantErr: false},
+		{name: "two", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 2, endianness: BigEndian}, wantErr: false},
+		{name: "max", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 65535, endianness: BigEndian}, wantErr: false},
+
+		{name: "zero", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 0, endianness: LittleEndian}, wantErr: false},
+		{name: "one", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 1, endianness: LittleEndian}, wantErr: false},
+		{name: "two", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 2, endianness: LittleEndian}, wantErr: false},
+		{name: "max", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 65535, endianness: LittleEndian}, wantErr: false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -263,6 +280,154 @@ func TestWriter_WriteUInt24(t *testing.T) {
 	}
 }
 
+func TestWriter_WriteInt32(t *testing.T) {
+	type fields struct {
+		Buffer *bytes.Buffer
+	}
+	type args struct {
+		data       int32
+		endianness Endianness
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		{name: "zero", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 0, endianness: BigEndian}, wantErr: false},
+		{name: "one", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 1, endianness: BigEndian}, wantErr: false},
+		{name: "two", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 2, endianness: BigEndian}, wantErr: false},
+		{name: "minus one", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: -1, endianness: BigEndian}, wantErr: false},
+		{name: "max", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 2147483647, endianness: BigEndian}, wantErr: false},
+
+		{name: "zero", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 0, endianness: LittleEndian}, wantErr: false},
+		{name: "one", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 1, endianness: LittleEndian}, wantErr: false},
+		{name: "two", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 2, endianness: LittleEndian}, wantErr: false},
+		{name: "minus one", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: -1, endianness: LittleEndian}, wantErr: false},
+		{name: "max", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 2147483647, endianness: LittleEndian}, wantErr: false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			w := &Writer{
+				Buffer: tt.fields.Buffer,
+			}
+			if err := w.WriteInt32(tt.args.data, tt.args.endianness); (err != nil) != tt.wantErr {
+				t.Errorf("Writer.WriteInt32() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestWriter_WriteUInt32(t *testing.T) {
+	type fields struct {
+		Buffer *bytes.Buffer
+	}
+	type args struct {
+		data       uint32
+		endianness Endianness
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		{name: "zero", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 0, endianness: BigEndian}, wantErr: false},
+		{name: "one", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 1, endianness: BigEndian}, wantErr: false},
+		{name: "two", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 2, endianness: BigEndian}, wantErr: false},
+		{name: "max", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 4294967295, endianness: BigEndian}, wantErr: false},
+
+		{name: "zero", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 0, endianness: LittleEndian}, wantErr: false},
+		{name: "one", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 1, endianness: LittleEndian}, wantErr: false},
+		{name: "two", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 2, endianness: LittleEndian}, wantErr: false},
+		{name: "max", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 4294967295, endianness: LittleEndian}, wantErr: false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			w := &Writer{
+				Buffer: tt.fields.Buffer,
+			}
+			if err := w.WriteUInt32(tt.args.data, tt.args.endianness); (err != nil) != tt.wantErr {
+				t.Errorf("Writer.WriteUInt32() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestWriter_WriteInt64(t *testing.T) {
+	type fields struct {
+		Buffer *bytes.Buffer
+	}
+	type args struct {
+		data       int64
+		endianness Endianness
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		{name: "zero", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 0, endianness: BigEndian}, wantErr: false},
+		{name: "one", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 1, endianness: BigEndian}, wantErr: false},
+		{name: "two", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 2, endianness: BigEndian}, wantErr: false},
+		{name: "minus one", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: -1, endianness: BigEndian}, wantErr: false},
+		{name: "max", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 9223372036854775807, endianness: BigEndian}, wantErr: false},
+
+		{name: "zero", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 0, endianness: LittleEndian}, wantErr: false},
+		{name: "one", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 1, endianness: LittleEndian}, wantErr: false},
+		{name: "two", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 2, endianness: LittleEndian}, wantErr: false},
+		{name: "minus one", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: -1, endianness: LittleEndian}, wantErr: false},
+		{name: "max", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 9223372036854775807, endianness: LittleEndian}, wantErr: false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			w := &Writer{
+				Buffer: tt.fields.Buffer,
+			}
+			if err := w.WriteInt64(tt.args.data, tt.args.endianness); (err != nil) != tt.wantErr {
+				t.Errorf("Writer.WriteInt64() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestWriter_WriteUInt64(t *testing.T) {
+	type fields struct {
+		Buffer *bytes.Buffer
+	}
+	type args struct {
+		data       uint64
+		endianness Endianness
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		{name: "zero", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 0, endianness: BigEndian}, wantErr: false},
+		{name: "one", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 1, endianness: BigEndian}, wantErr: false},
+		{name: "two", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 2, endianness: BigEndian}, wantErr: false},
+		{name: "max", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 18446744073709551615, endianness: BigEndian}, wantErr: false},
+
+		{name: "zero", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 0, endianness: LittleEndian}, wantErr: false},
+		{name: "one", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 1, endianness: LittleEndian}, wantErr: false},
+		{name: "two", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 2, endianness: LittleEndian}, wantErr: false},
+		{name: "max", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 18446744073709551615, endianness: LittleEndian}, wantErr: false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			w := &Writer{
+				Buffer: tt.fields.Buffer,
+			}
+			if err := w.WriteUInt64(tt.args.data, tt.args.endianness); (err != nil) != tt.wantErr {
+				t.Errorf("Writer.WriteUInt64() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
 func TestWriter_WriteVarInt(t *testing.T) {
 	type fields struct {
 		Buffer *bytes.Buffer
@@ -325,6 +490,154 @@ func TestWriter_WriteUVarInt(t *testing.T) {
 	}
 }
 
+func TestWriter_WriteLong(t *testing.T) {
+	type fields struct {
+		Buffer *bytes.Buffer
+	}
+	type args struct {
+		data       int64
+		endianness Endianness
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		{name: "zero", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 0, endianness: BigEndian}, wantErr: false},
+		{name: "one", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 1, endianness: BigEndian}, wantErr: false},
+		{name: "two", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 2, endianness: BigEndian}, wantErr: false},
+		{name: "minus one", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: -1}, wantErr: false},
+		{name: "max", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 9223372036854775807, endianness: BigEndian}, wantErr: false},
+
+		{name: "zero", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 0, endianness: LittleEndian}, wantErr: false},
+		{name: "one", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 1, endianness: LittleEndian}, wantErr: false},
+		{name: "two", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 2, endianness: LittleEndian}, wantErr: false},
+		{name: "minus one", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: -1}, wantErr: false},
+		{name: "max", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 9223372036854775807, endianness: LittleEndian}, wantErr: false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			w := &Writer{
+				Buffer: tt.fields.Buffer,
+			}
+			if err := w.WriteLong(tt.args.data, tt.args.endianness); (err != nil) != tt.wantErr {
+				t.Errorf("Writer.WriteLong() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestWriter_WriteUnsignedLong(t *testing.T) {
+	type fields struct {
+		Buffer *bytes.Buffer
+	}
+	type args struct {
+		data       uint64
+		endianness Endianness
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		{name: "zero", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 0, endianness: BigEndian}, wantErr: false},
+		{name: "one", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 1, endianness: BigEndian}, wantErr: false},
+		{name: "two", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 2, endianness: BigEndian}, wantErr: false},
+		{name: "max", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 18446744073709551615, endianness: BigEndian}, wantErr: false},
+
+		{name: "zero", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 0, endianness: LittleEndian}, wantErr: false},
+		{name: "one", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 1, endianness: LittleEndian}, wantErr: false},
+		{name: "two", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 2, endianness: LittleEndian}, wantErr: false},
+		{name: "max", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 18446744073709551615, endianness: LittleEndian}, wantErr: false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			w := &Writer{
+				Buffer: tt.fields.Buffer,
+			}
+			if err := w.WriteUnsignedLong(tt.args.data, tt.args.endianness); (err != nil) != tt.wantErr {
+				t.Errorf("Writer.WriteUnsignedLong() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestWriter_WriteLongLong(t *testing.T) {
+	type fields struct {
+		Buffer *bytes.Buffer
+	}
+	type args struct {
+		data       int64
+		endianness Endianness
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		{name: "zero BE", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 0, endianness: BigEndian}, wantErr: false},
+		{name: "one BE", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 1, endianness: BigEndian}, wantErr: false},
+		{name: "two BE", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 2, endianness: BigEndian}, wantErr: false},
+		{name: "minus one BE", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: -1}, wantErr: false},
+		{name: "max BE", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 9223372036854775807, endianness: BigEndian}, wantErr: false},
+
+		{name: "zero LE", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 0, endianness: LittleEndian}, wantErr: false},
+		{name: "one LE", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 1, endianness: LittleEndian}, wantErr: false},
+		{name: "two LE", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 2, endianness: LittleEndian}, wantErr: false},
+		{name: "minus one LE", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: -1}, wantErr: false},
+		{name: "max LE", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 9223372036854775807, endianness: LittleEndian}, wantErr: false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			w := &Writer{
+				Buffer: tt.fields.Buffer,
+			}
+			if err := w.WriteLongLong(tt.args.data, tt.args.endianness); (err != nil) != tt.wantErr {
+				t.Errorf("Writer.WriteLongLong() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestWriter_WriteUnsignedLongLong(t *testing.T) {
+	type fields struct {
+		Buffer *bytes.Buffer
+	}
+	type args struct {
+		data       uint64
+		endianness Endianness
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		{name: "zero BE", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 0, endianness: BigEndian}, wantErr: false},
+		{name: "one BE", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 1, endianness: BigEndian}, wantErr: false},
+		{name: "two BE", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 2, endianness: BigEndian}, wantErr: false},
+		{name: "max BE", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 18446744073709551615, endianness: BigEndian}, wantErr: false},
+
+		{name: "zero LE", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 0, endianness: LittleEndian}, wantErr: false},
+		{name: "one LE", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 1, endianness: LittleEndian}, wantErr: false},
+		{name: "two LE", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 2, endianness: LittleEndian}, wantErr: false},
+		{name: "max LE", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: 18446744073709551615, endianness: LittleEndian}, wantErr: false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			w := &Writer{
+				Buffer: tt.fields.Buffer,
+			}
+			if err := w.WriteUnsignedLongLong(tt.args.data, tt.args.endianness); (err != nil) != tt.wantErr {
+				t.Errorf("Writer.WriteUnsignedLongLong() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
 func TestWriter_WriteString(t *testing.T) {
 	type fields struct {
 		Buffer *bytes.Buffer
@@ -350,6 +663,58 @@ func TestWriter_WriteString(t *testing.T) {
 			}
 			if err := w.WriteString(tt.args.data); (err != nil) != tt.wantErr {
 				t.Errorf("Writer.WriteString() error = %v, wantErr %v", err, tt.wantErr)
+			}
+			fmt.Println(tt.fields.Buffer.Bytes())
+		})
+	}
+}
+
+func TestWriter_WriteStringSize(t *testing.T) {
+	type fields struct {
+		Buffer *bytes.Buffer
+	}
+	type args struct {
+		data     string
+		bytesize int8
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		{name: "empty", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: "", bytesize: 1}, wantErr: false},
+		{name: "one", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: "a", bytesize: 1}, wantErr: false},
+		{name: "two", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: "ab", bytesize: 1}, wantErr: false},
+		{name: "long", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: "abcdefghijklmnopqrstuvwxyz1234567890", bytesize: 1}, wantErr: false},
+
+		{name: "empty", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: "", bytesize: 2}, wantErr: false},
+		{name: "one", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: "a", bytesize: 2}, wantErr: false},
+		{name: "two", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: "ab", bytesize: 2}, wantErr: false},
+		{name: "long", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: "abcdefghijklmnopqrstuvwxyz1234567890", bytesize: 2}, wantErr: false},
+
+		{name: "empty", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: "", bytesize: 3}, wantErr: false},
+		{name: "one", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: "a", bytesize: 3}, wantErr: false},
+		{name: "two", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: "ab", bytesize: 3}, wantErr: false},
+		{name: "long", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: "abcdefghijklmnopqrstuvwxyz1234567890", bytesize: 3}, wantErr: false},
+
+		{name: "empty", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: "", bytesize: 4}, wantErr: false},
+		{name: "one", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: "a", bytesize: 4}, wantErr: false},
+		{name: "two", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: "ab", bytesize: 4}, wantErr: false},
+		{name: "long", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: "abcdefghijklmnopqrstuvwxyz1234567890", bytesize: 4}, wantErr: false},
+
+		{name: "empty", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: "", bytesize: 8}, wantErr: false},
+		{name: "one", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: "a", bytesize: 8}, wantErr: false},
+		{name: "two", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: "ab", bytesize: 8}, wantErr: false},
+		{name: "long", fields: fields{Buffer: new(bytes.Buffer)}, args: args{data: "abcdefghijklmnopqrstuvwxyz1234567890", bytesize: 8}, wantErr: false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			w := &Writer{
+				Buffer: tt.fields.Buffer,
+			}
+			if err := w.WriteStringSize(tt.args.data, tt.args.bytesize); (err != nil) != tt.wantErr {
+				t.Errorf("Writer.WriteStringSize() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
@@ -381,38 +746,6 @@ func TestWriter_WriteCompressedString(t *testing.T) {
 			if err := w.WriteCompressedString(tt.args.data); (err != nil) != tt.wantErr {
 				t.Errorf("Writer.WriteCompressedString() error = %v, wantErr %v", err, tt.wantErr)
 			}
-		})
-	}
-}
-
-func TestWriter_WriteLogicLong(t *testing.T) {
-	type fields struct {
-		Buffer *bytes.Buffer
-	}
-	type args struct {
-		tag string
-	}
-	tests := []struct {
-		name    string
-		fields  fields
-		args    args
-		wantErr bool
-	}{
-		{name: "zero", fields: fields{Buffer: new(bytes.Buffer)}, args: args{tag: ""}, wantErr: false},
-		{name: "3L", fields: fields{Buffer: new(bytes.Buffer)}, args: args{tag: "#2PP"}, wantErr: false},
-		{name: "4L", fields: fields{Buffer: new(bytes.Buffer)}, args: args{tag: "#8GGL"}, wantErr: false},
-		{name: "9L", fields: fields{Buffer: new(bytes.Buffer)}, args: args{tag: "#2890QRYUP"}, wantErr: false},
-		{name: "14L", fields: fields{Buffer: new(bytes.Buffer)}, args: args{tag: "#2890QRYUPGJLCV"}, wantErr: false},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			w := &Writer{
-				Buffer: tt.fields.Buffer,
-			}
-			if err := w.WriteLogicLong(tt.args.tag); (err != nil) != tt.wantErr {
-				t.Errorf("Writer.WriteLogicLong() error = %v, wantErr %v", err, tt.wantErr)
-			}
-			fmt.Println(w.Buffer.Bytes())
 		})
 	}
 }

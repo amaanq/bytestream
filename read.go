@@ -5,6 +5,7 @@ import (
 	"compress/zlib"
 	"encoding/binary"
 	"fmt"
+	"io/ioutil"
 )
 
 type Reader struct {
@@ -109,9 +110,9 @@ func (r *Reader) ReadInt24(endianness Endianness) (int32, error) {
 
 	switch endianness {
 	case BigEndian:
-		return int32(binary.BigEndian.Uint32(_bytes)), nil
+		return int32(uint32(_bytes[2]) | uint32(_bytes[1])<<8 | uint32(_bytes[0])<<16), nil
 	case LittleEndian:
-		return int32(binary.LittleEndian.Uint32(_bytes)), nil
+		return int32(uint32(_bytes[0]) | uint32(_bytes[1])<<8 | uint32(_bytes[2])<<16), nil
 	default:
 		return 0, fmt.Errorf("invalid endianness")
 	}
@@ -131,9 +132,9 @@ func (r *Reader) ReadUInt24(endianness Endianness) (uint32, error) {
 
 	switch endianness {
 	case BigEndian:
-		return binary.BigEndian.Uint32(_bytes), nil
+		return uint32(_bytes[2]) | uint32(_bytes[1])<<8 | uint32(_bytes[0])<<16, nil
 	case LittleEndian:
-		return binary.LittleEndian.Uint32(_bytes), nil
+		return uint32(_bytes[0]) | uint32(_bytes[1])<<8 | uint32(_bytes[2])<<16, nil
 	default:
 		return 0, fmt.Errorf("invalid endianness")
 	}
@@ -440,14 +441,16 @@ func (r *Reader) ReadCompressedString() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	defer zlibReader.Close()
 
-	decompressedBytes := make([]byte, decompressedLen)
-	n, err = zlibReader.Read(decompressedBytes)
+	decompressedBytes, err := ioutil.ReadAll(zlibReader)
 	if err != nil {
 		return "", err
 	}
-	if n != int(decompressedLen) {
+	err = zlibReader.Close()
+	if err != nil {
+		return "", err
+	}
+	if len(decompressedBytes) != int(decompressedLen) {
 		return "", fmt.Errorf("invalid number of bytes read! Read: " + fmt.Sprint(n) + " Expected: " + fmt.Sprint(decompressedLen))
 	}
 	return string(decompressedBytes), nil
@@ -478,11 +481,9 @@ func (r *Reader) ReadLogicLong(endianness Endianness) ([]string, error) {
 	case BigEndian:
 		low = int(binary.BigEndian.Uint32(low_bytes))
 		high = int(binary.BigEndian.Uint32(high_bytes))
-		//return fmt.Sprintf("(%d, %d)", low, high), fmt.Sprintf("(%d, %d)", low, high), nil
 	case LittleEndian:
 		low = int(binary.LittleEndian.Uint32(low_bytes))
 		high = int(binary.LittleEndian.Uint32(high_bytes))
-		//return fmt.Sprintf("(%d, %d)", low, high), fmt.Sprintf("(%d, %d)", low, high), nil
 	default:
 		return nil, fmt.Errorf("invalid endianness")
 	}
