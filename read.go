@@ -110,9 +110,17 @@ func (r *Reader) ReadInt24(endianness Endianness) (int32, error) {
 
 	switch endianness {
 	case BigEndian:
-		return int32(uint32(_bytes[2]) | uint32(_bytes[1])<<8 | uint32(_bytes[0])<<16), nil
+		uint24 := int32(uint32(_bytes[2]) | uint32(_bytes[1])<<8 | uint32(_bytes[0])<<16)
+		if uint24&0x800000 == 0 {
+			return uint24, nil
+		}
+		return uint24 - 0x1000000, nil
 	case LittleEndian:
-		return int32(uint32(_bytes[0]) | uint32(_bytes[1])<<8 | uint32(_bytes[2])<<16), nil
+		uint24 := int32(uint32(_bytes[0]) | uint32(_bytes[1])<<8 | uint32(_bytes[2])<<16)
+		if uint24&0x800000 == 0 {
+			return uint24, nil
+		}
+		return uint24 - 0x1000000, nil
 	default:
 		return 0, fmt.Errorf("invalid endianness")
 	}

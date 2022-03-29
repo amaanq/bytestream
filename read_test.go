@@ -257,7 +257,7 @@ func TestReader_ReadInt24(t *testing.T) {
 		{name: "one LE", fields: fields{Reader: bytes.NewReader([]byte{0x01, 0x00, 0x00})}, args: args{endianness: LittleEndian}, want: 1, wantErr: false},
 		{name: "minus one LE", fields: fields{Reader: bytes.NewReader([]byte{0xFF, 0xFF, 0xFF})}, args: args{endianness: LittleEndian}, want: -1, wantErr: false},
 		{name: "max LE", fields: fields{Reader: bytes.NewReader([]byte{0xFF, 0xFF, 0x7F})}, args: args{endianness: LittleEndian}, want: 8388607, wantErr: false},
-		{name: "max minus LE", fields: fields{Reader: bytes.NewReader([]byte{0x00, 0x80, 0x00})}, args: args{endianness: LittleEndian}, want: -8388608, wantErr: false},
+		{name: "max minus LE", fields: fields{Reader: bytes.NewReader([]byte{0x00, 0x00, 0x80})}, args: args{endianness: LittleEndian}, want: -8388608, wantErr: false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
