@@ -294,14 +294,14 @@ func (w *Writer) WriteCompressedString(data string) error {
 	return nil
 }
 
-func (w *Writer) WriteLogicLong(tag string, endianness Endianness) error {
-	Low, High := TagToID(tag)
-	err := w.WriteInt32(int32(Low), endianness)
-	if err != nil {
-		return err
-	}
-	return w.WriteInt32(int32(High), endianness)
-}
+// func (w *Writer) WriteLogicLong(tag string, endianness Endianness) error {
+// 	Low, High := TagToID(tag)
+// 	err := w.WriteInt32(int32(Low), endianness)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	return w.WriteInt32(int32(High), endianness)
+// }
 
 // TODO allow writing any int with size from int8 to int64 (mostly allow 40/48/56...)
 func (w *Writer) WriteUIntSize(data int64, size uint8, endianness Endianness) error {

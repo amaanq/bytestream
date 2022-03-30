@@ -9,11 +9,11 @@ import (
 )
 
 type Reader struct {
-	Reader *bytes.Reader
+	Reader *bytes.Buffer
 }
 
 func NewReader(data []byte) *Reader {
-	return &Reader{bytes.NewReader(data)}
+	return &Reader{bytes.NewBuffer(data)}
 }
 
 func (r *Reader) ReadBytes(length int) ([]byte, error) {
@@ -469,42 +469,42 @@ func (r *Reader) ReadCompressedString() (string, error) {
 }
 
 // The first index of the slice is the low and high ID, and the second index is the tag.
-func (r *Reader) ReadLogicLong(endianness Endianness) ([]string, error) {
-	// A logic long is 8 bytes
-	low_bytes := make([]byte, 4)
-	high_bytes := make([]byte, 4)
-	n, err := r.Reader.Read(low_bytes)
-	if err != nil {
-		return nil, err
-	}
-	if n != Int32Size {
-		return nil, fmt.Errorf("invalid number of bytes read! Read: " + fmt.Sprint(n) + " Expected: 4")
-	}
-	n, err = r.Reader.Read(high_bytes)
-	if err != nil {
-		return nil, err
-	}
-	if n != Int32Size {
-		return nil, fmt.Errorf("invalid number of bytes read! Read: " + fmt.Sprint(n) + " Expected: 4")
-	}
+// func (r *Reader) ReadLogicLong(endianness Endianness) ([]string, error) {
+// 	// A logic long is 8 bytes
+// 	low_bytes := make([]byte, 4)
+// 	high_bytes := make([]byte, 4)
+// 	n, err := r.Reader.Read(low_bytes)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	if n != Int32Size {
+// 		return nil, fmt.Errorf("invalid number of bytes read! Read: " + fmt.Sprint(n) + " Expected: 4")
+// 	}
+// 	n, err = r.Reader.Read(high_bytes)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	if n != Int32Size {
+// 		return nil, fmt.Errorf("invalid number of bytes read! Read: " + fmt.Sprint(n) + " Expected: 4")
+// 	}
 
-	var low, high int
-	switch endianness {
-	case BigEndian:
-		low = int(binary.BigEndian.Uint32(low_bytes))
-		high = int(binary.BigEndian.Uint32(high_bytes))
-	case LittleEndian:
-		low = int(binary.LittleEndian.Uint32(low_bytes))
-		high = int(binary.LittleEndian.Uint32(high_bytes))
-	default:
-		return nil, fmt.Errorf("invalid endianness")
-	}
-	tag, err := IDToTag(low, high)
-	if err != nil {
-		return nil, err
-	}
-	return []string{fmt.Sprintf("(%d, %d)", low, high), tag}, nil
-}
+// 	var low, high int
+// 	switch endianness {
+// 	case BigEndian:
+// 		low = int(binary.BigEndian.Uint32(low_bytes))
+// 		high = int(binary.BigEndian.Uint32(high_bytes))
+// 	case LittleEndian:
+// 		low = int(binary.LittleEndian.Uint32(low_bytes))
+// 		high = int(binary.LittleEndian.Uint32(high_bytes))
+// 	default:
+// 		return nil, fmt.Errorf("invalid endianness")
+// 	}
+// 	tag, err := IDToTag(low, high)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return []string{fmt.Sprintf("(%d, %d)", low, high), tag}, nil
+// }
 
 // TODO allow reading any int with size from int8 to int64 (mostly allow 40/48/56...)
 func (r *Reader) ReadUIntSize(size uint8, endianness Endianness) (int64, error) {
