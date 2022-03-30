@@ -14,8 +14,8 @@ import (
 )
 
 func main() {
-    Writer := &bytestream.Writer{
-	    buffer: bytes.NewBuffer([]byte{}),
+	Writer := &bytestream.Writer{
+		buffer: bytes.NewBuffer([]byte{}),
 	}
 	Writer.WriteCompressedString("hello there!")
 	Writer.WriteInt32(40, bytestream.BigEndian)
