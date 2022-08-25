@@ -29,7 +29,7 @@ func main() {
 ### As such, I do not recommend using it to detect/use with protocols already implemented. However, you can use this for your own protocol for whatever it may be. 
 <br/>
 
-### The file including the methods for "tags" have been omitted for security and privacy reasons, so don't bother trying to use the read/write LogicLong methods. I don't want any simpleton to figure out what game(s) this is for and use that to their knowledge.
+### LogicLongs are now in the public domain seeing as several other public repositories explain them and showcase how to pack/unpack them.
 <br/>
 
 # **Enjoy using this!**
